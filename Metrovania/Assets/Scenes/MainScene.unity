@@ -661,11 +661,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be08037d533e90f459c05ff994f07ee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  moveSpeed: 5
+  walkSpeed: 4
+  runSpeed: 8
   facingDirection: 1
   playerInput: {fileID: 1433011321}
   rb: {fileID: 1433011322}
+  animator: {fileID: 365493307}
   moveInput: {x: 0, y: 0}
+  runPressed: 0
   jumpForce: 15
   jumpMultiplier: 0.5
   normalGravity: 6

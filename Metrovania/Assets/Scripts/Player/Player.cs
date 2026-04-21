@@ -4,15 +4,18 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public float moveSpeed = 5f;
+    public float walkSpeed = 5f;
+    public float runSpeed = 8f;
     public int facingDirection = 1;
 
     [Header("References")]
     [SerializeField] private PlayerInput playerInput;
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Animator animator;
 
     [Header("Inputs")]
     public Vector2 moveInput;
+    [SerializeField] private bool runPressed;
 
     [Header("Jump Settings")]
     public float jumpForce = 10f;
@@ -37,11 +40,18 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Flip();
+
+        HandleAnimations();
     }
 
     public void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
+    }
+
+    public void OnRun(InputValue value)
+    {
+        runPressed = value.isPressed;
     }
 
     public void OnJump(InputValue value)
@@ -67,7 +77,8 @@ public class Player : MonoBehaviour
 
     void HandleMovement()
     {
-        float targetSpeed = moveInput.x * moveSpeed;
+        float currentSpeed = runPressed ? runSpeed : walkSpeed;
+        float targetSpeed = moveInput.x * currentSpeed;
         rb.linearVelocity = new Vector2(targetSpeed, rb.linearVelocity.y);
     }
 
@@ -109,6 +120,25 @@ public class Player : MonoBehaviour
     void CheckGrounded()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
+    }
+
+    void HandleAnimations()
+    {
+
+        bool isMoving = Mathf.Abs(moveInput.x) > 0.1f && isGrounded;
+
+
+        animator.SetBool("isIdling", !isMoving && isGrounded);
+
+        animator.SetBool("isWalking", isMoving && !runPressed);
+
+        animator.SetBool("isRunning", isMoving && runPressed);
+
+        animator.SetBool("isJumping", rb.linearVelocity.y > 0.1f);
+
+        animator.SetBool("isGrounded", isGrounded);
+
+        animator.SetFloat("yVelocity", rb.linearVelocity.y);
     }
 
     void Flip()
