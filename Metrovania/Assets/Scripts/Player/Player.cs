@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerInput playerInput;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator animator;
+    [SerializeField] private CapsuleCollider2D capsuleCollider;
 
     [Header("Inputs")]
     public Vector2 moveInput;
@@ -25,6 +26,16 @@ public class Player : MonoBehaviour
     public float jumpGravity;
     [SerializeField] private bool jumpPressed;
     [SerializeField] private bool jumpReleased;
+
+    [Header("Slide Settings")]
+    [SerializeField] private float slideDuration = 0.5f;
+    [SerializeField] private float slideSpeed = 12f;
+    [SerializeField] private bool isSliding = false;
+    private float slideHeight;
+    private float slideTimer;
+    public float normalHeight;
+    public Vector2 normalOffSet;
+    public Vector2 slideOffSet;
 
     [Header("Ground Check Settings")]
     public Transform groundCheck;
@@ -41,6 +52,7 @@ public class Player : MonoBehaviour
     {
         Flip();
         HandleAnimations();
+        HandleSlide();
     }
 
     public void OnMove(InputValue value)
@@ -72,6 +84,27 @@ public class Player : MonoBehaviour
         ApplyGravity();
         CheckGrounded();
         HandleJump();
+    }
+
+    void HandleSlide()
+    {
+        if(isSliding)
+        {
+            slideTimer -= Time.deltaTime;
+
+            if(slideTimer < 0)
+            {
+                isSliding = false;
+            }
+
+
+            if(isGrounded && runPressed && moveInput.y < -0.1f && isGrounded)
+            {
+                isSliding = true;
+                slideTimer = slideDuration;
+                rb.linearVelocity = new Vector2(slideSpeed * facingDirection,rb.linearVelocity.y);
+            }
+        }
     }
 
     void HandleMovement()
@@ -125,7 +158,6 @@ public class Player : MonoBehaviour
     {
 
         bool isMoving = Mathf.Abs(moveInput.x) > 0.1f && isGrounded;
-
 
         animator.SetBool("isIdling", !isMoving && isGrounded);
 
