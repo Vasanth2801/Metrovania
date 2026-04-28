@@ -3,6 +3,14 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    #region StateMachines
+    [Header("Player Modular States")]
+    public PlayerState currentState;
+
+    public IdleState idleState;
+    #endregion
+
+    #region Variables
     [Header("Movement Settings")]
     public float walkSpeed = 5f;
     public float runSpeed = 8f;
@@ -12,11 +20,13 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerInput playerInput;
     public Rigidbody2D rb;
     public Animator animator;
-    [SerializeField] private CapsuleCollider2D capsuleCollider;
+    [SerializeField] private CapsuleCollider2D playerCollider;
 
     [Header("Inputs")]
     public Vector2 moveInput;
     public bool runPressed;
+    public bool jumpPressed;
+    public bool jumpReleased;
 
     [Header("Jump Settings")]
     public float jumpForce = 10f;
@@ -24,37 +34,68 @@ public class Player : MonoBehaviour
     public float normalGravity;
     public float fallGravity;
     public float jumpGravity;
-    public bool jumpPressed;
-    public bool jumpReleased;
-
+ 
     [Header("Slide Settings")]
     [SerializeField] private float slideDuration = 0.5f;
     [SerializeField] private float slideSpeed = 12f;
+    [SerializeField] private float slideStopDuration = 0.2f;
     [SerializeField] private bool isSliding = false;
     private float slideHeight;
-    private float slideTimer;
     public float normalHeight;
+    private float slideTimer;
     public Vector2 normalOffSet;
     public Vector2 slideOffSet;
+
+    [Header("Crouch Settings")]
+    [SerializeField] private Transform cielingCheck;
+    [SerializeField] private float cielingRadius = 0.2f;
 
     [Header("Ground Check Settings")]
     public Transform groundCheck;
     public float groundRadius;
     public LayerMask groundLayer;
     [SerializeField] private bool isGrounded;
+    #endregion
+
+    #region Start and Update
+
+    private void Awake()
+    {
+        idleState = new IdleState(this);
+    
+    }
 
     private void Start()
     {
         rb.gravityScale = normalGravity;
+
+        ChangeState(idleState);
     }
 
     private void Update()
     {
+        currentState.Update();
+
         Flip();
         HandleAnimations();
         HandleSlide();
     }
 
+    private void FixedUpdate()
+    {
+        currentState.FixedUpdate();
+
+        if (!isSliding)
+        {
+            HandleMovement();
+        }
+        ApplyGravity();
+        CheckGrounded();
+        HandleJump();
+    }
+    #endregion
+
+    #region Input Handling
     public void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
@@ -77,16 +118,18 @@ public class Player : MonoBehaviour
             jumpReleased = true;
         }
     }
+    #endregion
 
-    private void FixedUpdate()
+    #region Movement and Slide Methods
+    public void ChangeState(PlayerState newState)
     {
-        if (!isSliding)
+        if(currentState != null)
         {
-            HandleMovement();
+            currentState.Exit();
         }
-        ApplyGravity();
-        CheckGrounded();
-        HandleJump();
+
+        currentState = newState;
+        currentState.Enter();
     }
 
     void HandleSlide()
@@ -109,7 +152,9 @@ public class Player : MonoBehaviour
             }
         }
     }
+    #endregion
 
+    #region Jump and Gravity Methods
     void HandleMovement()
     {
         float currentSpeed = runPressed ? runSpeed : walkSpeed;
@@ -156,7 +201,28 @@ public class Player : MonoBehaviour
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
     }
+    #endregion
 
+    #region Sliding and Crouching Check Methods
+    public bool CheckCieling()
+    {
+        return Physics2D.OverlapCircle(cielingCheck.position, cielingRadius, groundLayer);
+    }
+
+    public void SetColliderNormal()
+    {
+        playerCollider.size = new Vector2(playerCollider.size.x, normalHeight);
+        playerCollider.offset = normalOffSet;
+    }
+
+    public void SetColliderSlide()
+    {
+        playerCollider.size = new Vector2(playerCollider.size.x, slideHeight);
+        playerCollider.offset = slideOffSet;
+    }
+    #endregion
+
+    #region Animations and Flip
     void HandleAnimations()
     {
 
@@ -190,4 +256,5 @@ public class Player : MonoBehaviour
 
         transform.localScale = new Vector3(facingDirection, 1, 1);
     }
+    #endregion
 }
