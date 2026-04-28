@@ -454,7 +454,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.21, z: -10}
+  m_LocalPosition: {x: 0, y: -1.3, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -693,7 +693,7 @@ Transform:
   m_GameObject: {fileID: 637339652}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.21, z: -10}
+  m_LocalPosition: {x: 0, y: -1.3, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4413,7 +4413,7 @@ Transform:
   m_GameObject: {fileID: 1433011318}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.21, z: 0}
+  m_LocalPosition: {x: 0, y: -3.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4533,6 +4533,7 @@ MonoBehaviour:
   playerInput: {fileID: 1433011321}
   rb: {fileID: 1433011322}
   animator: {fileID: 365493307}
+  capsuleCollider: {fileID: 1433011320}
   moveInput: {x: 0, y: 0}
   runPressed: 0
   jumpForce: 15
@@ -4542,6 +4543,12 @@ MonoBehaviour:
   jumpGravity: 4
   jumpPressed: 0
   jumpReleased: 0
+  slideDuration: 0.5
+  slideSpeed: 12
+  isSliding: 0
+  normalHeight: 0
+  normalOffSet: {x: 0, y: 0}
+  slideOffSet: {x: 0, y: 0}
   groundCheck: {fileID: 1600258486}
   groundRadius: 0.3
   groundLayer:
