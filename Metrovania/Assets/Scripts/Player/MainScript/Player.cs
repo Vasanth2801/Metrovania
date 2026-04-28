@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     public IdleState idleState;
 
     public MoveState moveState;
+
+    public JumpState jumpState;
     #endregion
 
     #region Variables
@@ -38,10 +40,10 @@ public class Player : MonoBehaviour
     public float jumpGravity;
  
     [Header("Slide Settings")]
-    [SerializeField] private float slideDuration = 0.5f;
-    [SerializeField] private float slideSpeed = 12f;
-    [SerializeField] private float slideStopDuration = 0.2f;
-    [SerializeField] private bool isSliding = false;
+    public float slideDuration = 0.5f;
+    public float slideSpeed = 12f;
+    public float slideStopDuration = 0.2f;
+    public bool isSliding = false;
     private float slideHeight;
     public float normalHeight;
     private float slideTimer;
@@ -67,6 +69,8 @@ public class Player : MonoBehaviour
 
         moveState = new MoveState(this);
 
+        jumpState = new JumpState(this);
+
     }
 
     private void Start()
@@ -80,22 +84,18 @@ public class Player : MonoBehaviour
     {
         currentState.Update();
 
-        Flip();
+        if (!isSliding)
+        {
+            Flip();
+        }
         HandleAnimations();
-        HandleSlide();
     }
 
     private void FixedUpdate()
     {
         currentState.FixedUpdate();
 
-        if (!isSliding)
-        {
-            HandleMovement();
-        }
-        ApplyGravity();
         CheckGrounded();
-        HandleJump();
     }
     #endregion
 
@@ -124,7 +124,7 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    #region Movement and Slide Methods
+    #region Changing the States 
     public void ChangeState(PlayerState newState)
     {
         if(currentState != null)
@@ -135,57 +135,11 @@ public class Player : MonoBehaviour
         currentState = newState;
         currentState.Enter();
     }
-
-    void HandleSlide()
-    {
-        if(isSliding)
-        {
-            slideTimer -= Time.deltaTime;
-
-            if(slideTimer < 0)
-            {
-                isSliding = false;
-            }
-
-
-            if (isGrounded && runPressed && moveInput.y < -0.1f && !isSliding)
-            {
-                isSliding = true;
-                slideTimer = slideDuration;
-                rb.linearVelocity = new Vector2(slideSpeed * facingDirection, rb.linearVelocity.y);
-            }
-        }
-    }
     #endregion
 
-    #region Jump and Gravity Methods
-    void HandleMovement()
-    {
-        float currentSpeed = runPressed ? runSpeed : walkSpeed;
-        float targetSpeed = moveInput.x * currentSpeed;
-        rb.linearVelocity = new Vector2(targetSpeed, rb.linearVelocity.y);
-    }
-
-    void HandleJump()
-    {
-        if(jumpPressed && isGrounded)
-        {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            jumpPressed = false;
-            jumpReleased = false;
-        }
-       
-        if(jumpReleased)
-        {
-            if(rb.linearVelocity.y > 0.1f)
-            {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpMultiplier);
-            }
-            jumpReleased = false;
-        }
-    }
-
-    void ApplyGravity()
+    #region Gravity Methods
+  
+    public void ApplyGravity()
     {
         if(rb.linearVelocity.y < -0.1f)
         {
@@ -229,18 +183,6 @@ public class Player : MonoBehaviour
     #region Animations and Flip
     void HandleAnimations()
     {
-
-        bool isMoving = Mathf.Abs(moveInput.x) > 0.1f && isGrounded;
-
-        animator.SetBool("isIdling", !isMoving && isGrounded && !isSliding);
-
-        animator.SetBool("isWalking", isMoving && !runPressed && !isSliding);
-
-        animator.SetBool("isRunning", isMoving && runPressed && !isSliding);
-
-        animator.SetBool("isJumping", rb.linearVelocity.y > 0.1f);
-
-        animator.SetBool("isSliding", isSliding);
 
         animator.SetBool("isGrounded", isGrounded);
 

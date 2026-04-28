@@ -13,7 +13,11 @@ public class MoveState : PlayerState
     {
         base.Update();
 
-        if(Mathf.Abs(MoveInput.x) < 0.1f)
+        if(JumpPressed)
+        {
+            player.ChangeState(player.jumpState);
+        }
+        else if(Mathf.Abs(MoveInput.x) < 0.1f)
         { 
             player.ChangeState(player.idleState);
         }

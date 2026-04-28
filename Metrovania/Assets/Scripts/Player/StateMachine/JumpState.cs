@@ -29,5 +29,22 @@ public class JumpState : PlayerState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
+
+        player.ApplyGravity();
+
+        if(JumpReleased && rb.linearVelocity.y >= 0.1f)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * player.jumpMultiplier);
+            JumpReleased = false;
+        }
+
+        float speed = RunPressed ? player.runSpeed : player.walkSpeed;
+        rb.linearVelocity = new Vector2(player.facingDirection * speed, rb.linearVelocity.y);
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        animator.SetBool("isJumping", false);
     }
 }

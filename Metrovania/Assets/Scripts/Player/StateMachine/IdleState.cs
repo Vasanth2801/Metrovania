@@ -11,9 +11,18 @@ public class IdleState : PlayerState
        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
     }
 
-    public override void FixedUpdate()
+    public override void Update()
     {
-        base.FixedUpdate();
+        base.Update();
+
+        if(JumpPressed)
+        {
+            player.ChangeState(player.jumpState);
+        }
+        else if(Mathf.Abs(MoveInput.x) > 0.1f)
+        {
+            player.ChangeState(player.moveState);
+        }
     }
 
     public override void Exit()
