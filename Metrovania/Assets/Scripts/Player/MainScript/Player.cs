@@ -12,6 +12,12 @@ public class Player : MonoBehaviour
     public MoveState moveState;
 
     public JumpState jumpState;
+
+    public SlideState slideState;
+
+    public CrouchState crouchState;
+
+
     #endregion
 
     #region Variables
