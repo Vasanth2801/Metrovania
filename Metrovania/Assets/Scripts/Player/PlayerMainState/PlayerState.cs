@@ -26,6 +26,8 @@ public abstract class PlayerState
         set => player.runPressed = value;
     }
 
+    protected Vector2 MoveInput => player.moveInput;
+
     public PlayerState(Player player)
     {
         this.player = player;

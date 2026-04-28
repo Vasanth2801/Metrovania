@@ -4533,22 +4533,25 @@ MonoBehaviour:
   playerInput: {fileID: 1433011321}
   rb: {fileID: 1433011322}
   animator: {fileID: 365493307}
-  capsuleCollider: {fileID: 1433011320}
+  playerCollider: {fileID: 1433011320}
   moveInput: {x: 0, y: 0}
   runPressed: 0
+  jumpPressed: 0
+  jumpReleased: 0
   jumpForce: 15
   jumpMultiplier: 0.5
   normalGravity: 6
   fallGravity: 9
   jumpGravity: 4
-  jumpPressed: 0
-  jumpReleased: 0
   slideDuration: 0.5
   slideSpeed: 12
+  slideStopDuration: 0.2
   isSliding: 0
   normalHeight: 0
   normalOffSet: {x: 0, y: 0}
   slideOffSet: {x: 0, y: 0}
+  cielingCheck: {fileID: 0}
+  cielingRadius: 0.2
   groundCheck: {fileID: 1600258486}
   groundRadius: 0.3
   groundLayer:

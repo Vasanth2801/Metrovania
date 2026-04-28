@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     public PlayerState currentState;
 
     public IdleState idleState;
+
+    public MoveState moveState;
     #endregion
 
     #region Variables
@@ -54,7 +56,7 @@ public class Player : MonoBehaviour
     public Transform groundCheck;
     public float groundRadius;
     public LayerMask groundLayer;
-    [SerializeField] private bool isGrounded;
+    public  bool isGrounded;
     #endregion
 
     #region Start and Update
@@ -62,7 +64,9 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         idleState = new IdleState(this);
-    
+
+        moveState = new MoveState(this);
+
     }
 
     private void Start()
