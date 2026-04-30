@@ -220,6 +220,7 @@ GameObject:
   - component: {fileID: 365493305}
   - component: {fileID: 365493306}
   - component: {fileID: 365493307}
+  - component: {fileID: 365493308}
   m_Layer: 0
   m_Name: sprite
   m_TagString: Untagged
@@ -322,6 +323,26 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &365493308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365493304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4f2da094f906d34bbcc0a5a2f6673a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Combat
+  player: {fileID: 1433011323}
+  attackPoint: {fileID: 0}
+  attackRange: 0.5
+  attackCooldown: 1
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  attackDamage: 10
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -4534,10 +4555,12 @@ MonoBehaviour:
   rb: {fileID: 1433011322}
   animator: {fileID: 365493307}
   playerCollider: {fileID: 1433011320}
+  combat: {fileID: 365493308}
   moveInput: {x: 0, y: 0}
   runPressed: 0
   jumpPressed: 0
   jumpReleased: 0
+  attackPressed: 0
   jumpForce: 15
   jumpMultiplier: 0.5
   normalGravity: 6

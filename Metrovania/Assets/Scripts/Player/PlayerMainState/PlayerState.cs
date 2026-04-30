@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public abstract class PlayerState
@@ -7,6 +8,8 @@ public abstract class PlayerState
     protected Animator animator;
 
     protected Rigidbody2D rb;
+
+    protected Combat combat;
 
     protected bool JumpPressed
     {
@@ -26,6 +29,12 @@ public abstract class PlayerState
         set => player.runPressed = value;
     }
 
+    protected bool AttackPressed
+    {
+        get => player.attackPressed;
+        set => player.attackPressed = value;
+    }
+
     protected Vector2 MoveInput => player.moveInput;
 
     public PlayerState(Player player)
@@ -33,6 +42,7 @@ public abstract class PlayerState
         this.player = player;
         this.animator = player.animator;
         this.rb = player.rb;
+        this.combat = player.combat;
     }
 
     public virtual void Enter() { }
@@ -40,6 +50,8 @@ public abstract class PlayerState
     public virtual void Update() { }
 
     public virtual void FixedUpdate() { }
+
+    public virtual void AttackAnimationFinished() { }
 
     public virtual void Exit() { }
 }

@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
 
     public CrouchState crouchState;
 
+    public AttackState attackState;
+
 
     #endregion
 
@@ -31,12 +33,14 @@ public class Player : MonoBehaviour
     public Rigidbody2D rb;
     public Animator animator;
     [SerializeField] private CapsuleCollider2D playerCollider;
+    public Combat combat; 
 
     [Header("Inputs")]
     public Vector2 moveInput;
     public bool runPressed;
     public bool jumpPressed;
     public bool jumpReleased;
+    public bool attackPressed;
 
     [Header("Jump Settings")]
     public float jumpForce = 10f;
@@ -80,6 +84,8 @@ public class Player : MonoBehaviour
         slideState = new SlideState(this);
 
         crouchState = new CrouchState(this);
+
+        attackState = new AttackState(this);
 
     }
 
@@ -131,6 +137,16 @@ public class Player : MonoBehaviour
         {
             jumpReleased = true;
         }
+    }
+
+    public void OnAttack(InputValue value)
+    {
+        attackPressed = value.isPressed;
+    }
+
+    public void AttackAnimationFinished()
+    {
+        currentState.AttackAnimationFinished();
     }
     #endregion
 
