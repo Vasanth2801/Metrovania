@@ -77,6 +77,10 @@ public class Player : MonoBehaviour
 
         jumpState = new JumpState(this);
 
+        slideState = new SlideState(this);
+
+        crouchState = new CrouchState(this);
+
     }
 
     private void Start()

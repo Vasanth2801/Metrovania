@@ -21,6 +21,10 @@ public class MoveState : PlayerState
         { 
             player.ChangeState(player.idleState);
         }
+        else if(player.isGrounded && RunPressed && MoveInput.y < -0.1f)
+        {
+            player.ChangeState(player.slideState);
+        }
         else
         {
             animator.SetBool("isWalking", !RunPressed);

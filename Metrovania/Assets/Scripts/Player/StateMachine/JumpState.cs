@@ -32,7 +32,7 @@ public class JumpState : PlayerState
 
         player.ApplyGravity();
 
-        if(JumpReleased && rb.linearVelocity.y >= 0.1f)
+        if(JumpReleased && rb.linearVelocity.y > 0.1f)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * player.jumpMultiplier);
             JumpReleased = false;

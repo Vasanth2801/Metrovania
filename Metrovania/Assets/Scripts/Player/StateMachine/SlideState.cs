@@ -25,7 +25,7 @@ public class SlideState : PlayerState
         {
             slideTimer -= Time.deltaTime;
         }
-        else if (slideStopTimer <= 0)
+        else if (slideStopTimer > 0)
         {
             slideStopTimer = player.slideStopDuration;
         }
@@ -35,7 +35,7 @@ public class SlideState : PlayerState
 
             if(slideStopTimer <= 0)
             {
-                if(player.CheckCieling() || MoveInput.y < -0.1f)
+                if(player.CheckCieling() || MoveInput.y <= -0.1f)
                 {
                     player.ChangeState(player.crouchState);
                 }

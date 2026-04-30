@@ -4,7 +4,6 @@ public class IdleState : PlayerState
 {
     public IdleState(Player player) : base(player) { }
 
-
     public override void Enter()
     {
        animator.SetBool("isIdling", true);
@@ -22,6 +21,10 @@ public class IdleState : PlayerState
         else if(Mathf.Abs(MoveInput.x) > 0.1f)
         {
             player.ChangeState(player.moveState);
+        }
+        else if(MoveInput.y < -0.1f)
+        {
+            player.ChangeState(player.crouchState);
         }
     }
 

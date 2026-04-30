@@ -46,5 +46,4 @@ public class CrouchState : PlayerState
         animator.SetBool("isCrouching", false);
         player.SetColliderNormal();
     }
-
 }
